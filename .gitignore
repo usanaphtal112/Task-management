@@ -1,0 +1,34 @@
+#backend
+/todo_backend/.venv/
+/todo_backend/.env
+/todo_backend/.vscode/
+.vscode/
+/todo_backend/__pycache__/
+/todo_backend/db.sqlite3
+
+
+#Frontend
+# Logs
+/todo_frontent/logs
+/todo_frontent/*.log
+/todo_frontent/npm-debug.log*
+/todo_frontent/yarn-debug.log*
+/todo_frontent/yarn-error.log*
+/todo_frontent/pnpm-debug.log*
+/todo_frontent/lerna-debug.log*
+
+/todo_frontent/node_modules
+/todo_frontent/dist
+/todo_frontent/dist-ssr
+/todo_frontent/*.local
+
+# Editor directories and files
+/todo_frontent/.vscode/*
+/todo_frontent/!.vscode/extensions.json
+/todo_frontent/.idea
+/todo_frontent/.DS_Store
+/todo_frontent/*.suo
+/todo_frontent/*.ntvs*
+/todo_frontent/*.njsproj
+/todo_frontent/*.sln
+/todo_frontent/*.sw?
