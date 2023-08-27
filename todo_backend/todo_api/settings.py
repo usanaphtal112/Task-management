@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "dj_rest_auth",
     "dj_rest_auth.registration",
+    "drf_spectacular",
     # Local apps
     "accounts.apps.AccountsConfig",
     "todos.apps.TodosConfig",
@@ -67,6 +68,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 MIDDLEWARE = [
@@ -178,3 +180,10 @@ SITE_URL = "http://localhost:5173/"
 API_URL = "http://localhost:8000/"
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
+
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Task Management API Project",
+    "DESCRIPTION": "A Simple Task Management project",
+    "VERSION": "1.0.0",
+}
