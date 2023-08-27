@@ -4,6 +4,7 @@
 /todo_backend/.vscode/
 .vscode/
 /todo_backend/__pycache__/
+/todo_backend/todo_api/__pycache__/
 /todo_backend/db.sqlite3
 
 
