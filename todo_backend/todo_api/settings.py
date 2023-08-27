@@ -44,10 +44,19 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # 3rd-party apps
+    "rest_framework",
+    "corsheaders",
     # Local apps
     "accounts.apps.AccountsConfig",
     "todos.apps.TodosConfig",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -144,3 +153,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+# SITE_URL = "http://localhost:3000/"
+SITE_URL = "http://localhost:5173/"
+API_URL = "http://localhost:8000/"
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
