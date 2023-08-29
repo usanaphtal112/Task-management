@@ -1,6 +1,5 @@
 import TaskBoard from "./Components/TaskBoard";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import TaskDetails from "./Components/TaskDetails";
 
 function App() {
   return (
@@ -9,7 +8,6 @@ function App() {
         <Routes>
           <Route exact path="/" element={<TaskBoard />}></Route>
           <Route exact path="/tasks" element={<TaskBoard />}></Route>
-          <Route exact path="/tasks/:id" element={<TaskDetails />}></Route>
         </Routes>
       </Router>
     </div>

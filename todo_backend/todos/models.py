@@ -5,16 +5,17 @@ from django.conf import settings
 from django.utils import timezone
 
 
-class Task(models.Model):
-    STATUS_CHOICES = [
-        ("To Do", "To Do"),
-        ("Doing", "Doing"),
-        ("Done", "Done"),
-    ]
+class Category(models.Model):
+    name = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.name
+
+
+class Task(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField()
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="To Do")
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
