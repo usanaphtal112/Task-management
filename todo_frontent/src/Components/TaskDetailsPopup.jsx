@@ -1,22 +1,10 @@
 import React, { useState } from "react";
-import { updateTask, deleteTask } from "./TaskUtilities"; // Import your updateTask and deleteTask functions
+import { updateTask, deleteTask } from "./TaskUtilities";
+import "./Styles/TaskDetailsPopup.css";
 
 const TaskDetailsPopup = ({ task, onClose, onTaskUpdated }) => {
   const [editedTask, setEditedTask] = useState(task);
   const [isEditing, setIsEditing] = useState(false);
-
-  const popupStyle = {
-    position: "fixed",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "400px",
-    padding: "20px",
-    backgroundColor: "white",
-    borderRadius: "5px",
-    boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
-    zIndex: 1000,
-  };
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -26,19 +14,24 @@ const TaskDetailsPopup = ({ task, onClose, onTaskUpdated }) => {
     try {
       await updateTask(editedTask.id, editedTask);
       setIsEditing(false);
-      onTaskUpdated(); // Trigger the task re-fetch
+      onTaskUpdated(editedTask);
     } catch (error) {
       console.error("Error updating task:", error);
     }
   };
 
   const handleDelete = async () => {
-    try {
-      await deleteTask(task.id);
-      onClose();
-      onTaskUpdated(); // Trigger the task re-fetch
-    } catch (error) {
-      console.error("Error deleting task:", error);
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
+    if (shouldDelete) {
+      try {
+        await deleteTask(task.id);
+        onClose();
+        onTaskDeleted(task);
+      } catch (error) {
+        console.error("Error deleting task:", error);
+      }
     }
   };
 
@@ -52,7 +45,7 @@ const TaskDetailsPopup = ({ task, onClose, onTaskUpdated }) => {
   };
 
   return (
-    <div style={popupStyle}>
+    <div className="popup">
       {isEditing ? (
         <>
           <input

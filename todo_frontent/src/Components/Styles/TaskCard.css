@@ -1,0 +1,51 @@
+/* Default styles for all screen sizes */
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: rgb(1, 50, 56);
+    cursor: pointer;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+    cursor: pointer;
+    color: #ccc;
+  }
+  
+  /* Responsive styles for mobile */
+  @media (max-width: 600px) {
+    .card {
+      padding: 8px;
+    }
+  
+    .title {
+      font-size: 1.3rem;
+    }
+  }
+  
+  /* Responsive styles for tablet */
+  @media (min-width: 601px) and (max-width: 1024px) {
+    .card {
+      padding: 12px;
+    }
+  
+    .title {
+      font-size: 1.7rem;
+    }
+  }
+  
+  /* Responsive styles for desktop */
+  @media (min-width: 1025px) {
+    .card {
+      padding: 14px;
+    }
+  
+    .title {
+      font-size: 2rem;
+    }
+  }
+  

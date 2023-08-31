@@ -48,27 +48,12 @@ INSTALLED_APPS = [
     # 3rd-party apps
     "rest_framework",
     "corsheaders",
-    "rest_framework.authtoken",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "dj_rest_auth",
-    "dj_rest_auth.registration",
     "drf_spectacular",
     # Local apps
-    "accounts.apps.AccountsConfig",
     "todos.apps.TodosConfig",
 ]
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
-        # "rest_framework.permissions.IsAuthenticated",
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
@@ -110,13 +95,6 @@ WSGI_APPLICATION = "todo_api.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
 
 
 DATABASES = {
@@ -171,15 +149,12 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-AUTH_USER_MODEL = "accounts.CustomUser"
-
-
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 # SITE_URL = "http://localhost:3000/"
-SITE_URL = "http://localhost:5173/"
-API_URL = "http://localhost:8000/"
+SITE_URL = env.str("SITE_URL")
+API_URL = env.str("API_URL")
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
 

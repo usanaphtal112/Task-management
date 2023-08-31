@@ -100,11 +100,11 @@ export const updateTask = async (taskId, newData) => {
 
 export const updateTaskOnDrop = async (taskId, newData) => {
   try {
-    const taskToUpdate = await fetchTaskDetails(taskId); // Fetch the existing task data
-    const updatedTask = { ...taskToUpdate, ...newData }; // Merge existing data with updated category
+    const taskToUpdate = await fetchTaskDetails(taskId);
+    const updatedTask = { ...taskToUpdate, ...newData };
     const response = await axios.put(
       `${API_BASE_URL}tasks/${taskId}/`,
-      updatedTask // Send the updated task data
+      updatedTask
     );
     return response.data;
   } catch (error) {
@@ -119,6 +119,16 @@ export const deleteTask = async (taskId) => {
     return response.data;
   } catch (error) {
     console.error("Error deleting task:", error);
+    throw error;
+  }
+};
+
+export const addTask = async (newTaskData) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}tasks/`, newTaskData);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding task:", error);
     throw error;
   }
 };

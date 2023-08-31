@@ -1,0 +1,59 @@
+.task-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  .status-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+
+  .status-column {
+    flex: 1;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0 10px 20px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    background-color: #36454F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  button:hover {
+    background-color: #00273b;
+  }
+  
+  @media (max-width: 600px) {
+    .status-column {
+      max-width: none;
+      flex-basis: calc(50% - 20px);
+    }
+    h2 {
+      font-size: 1.8rem;
+    }
+  
+  }
+  

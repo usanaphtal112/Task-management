@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import TaskCard from "./TaskCard";
+import AddTaskPopup from "./AddTaskPopup";
 import {
   fetchTasks,
   updateTaskOnDrop,
   fetchTaskboardStages,
 } from "./TaskUtilities";
-import "./TaskBoard.css";
+import "./Styles/TaskBoard.css";
 
 const TaskBoard = () => {
   const [tasks, setTasks] = useState([]);
   const [taskStages, setTaskStages] = useState([]);
+  const [showAddTaskPopup, setShowAddTaskPopup] = useState(false);
+  const [selectedStage, setSelectedStage] = useState(null);
 
   useEffect(() => {
     fetchTasks(setTasks);
@@ -27,7 +30,7 @@ const TaskBoard = () => {
       const taskId = parseInt(result.draggableId, 10);
 
       await updateTaskOnDrop(taskId, {
-        category: parseInt(destinationStatus), // Update task category
+        category: parseInt(destinationStatus),
       });
 
       const updatedTasks = tasks.map((task) =>
@@ -39,10 +42,32 @@ const TaskBoard = () => {
     }
   };
 
+  const handleAddTask = (stage) => {
+    setSelectedStage(stage);
+    setShowAddTaskPopup(true);
+  };
+
+  const handleTaskAdded = (newTask) => {
+    // setTasks([...tasks, newTask]);
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+  };
+
+  const handleTaskUpdated = (updatedTask) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+    );
+  };
+
+  const handleTaskDeleted = (deletedTask) => {
+    setTasks((prevTasks) =>
+      prevTasks.filter((task) => task.id !== deletedTask.id)
+    );
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="task-board">
-        <h2>Task Management Projects</h2>
+        {/* <h2>Task Management Projects</h2> */}
         <div className="status-row">
           {taskStages.map((stage) => (
             <Droppable
@@ -71,17 +96,34 @@ const TaskBoard = () => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            <TaskCard task={task} />
+                            <TaskCard
+                              task={task}
+                              onTaskUpdated={handleTaskUpdated} // Pass onTaskUpdated function
+                              onTaskDeleted={handleTaskDeleted} // Pass onTaskDeleted function
+                            />
                           </div>
                         )}
                       </Draggable>
                     ))}
                   {provided.placeholder}
+                  <button onClick={() => handleAddTask(stage)}>
+                    Add New Task
+                  </button>
                 </div>
               )}
             </Droppable>
           ))}
         </div>
+        {showAddTaskPopup && (
+          <AddTaskPopup
+            stage={selectedStage} // Pass the selected stage here
+            onClose={() => {
+              setSelectedStage(null); // Reset selected stage
+              setShowAddTaskPopup(false);
+            }}
+            onTaskAdded={handleTaskAdded}
+          />
+        )}
       </div>
     </DragDropContext>
   );

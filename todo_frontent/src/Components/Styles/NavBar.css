@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  background-color: #34495e;
+  height: 90px;
+  position: relative;
+}
+
+.brand {
+  font-size: 30px;
+  font-weight: bolder;
+  color: #ecf0f1;
+}
+
+.animated-text {
+  font-size: 30px;
+  font-weight: 50px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  animation: fadeIn 0.5s forwards;
+  position: absolute;
+  bottom: 21px;
+  right: 0;
+  transform: translate(-50%, 50%);
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

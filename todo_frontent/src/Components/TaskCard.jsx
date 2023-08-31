@@ -1,24 +1,10 @@
 import React, { useState } from "react";
-import TaskDetailsPopup from "./TaskDetailsPopup"; // Import your TaskDetailsPopup component
+import TaskDetailsPopup from "./TaskDetailsPopup";
 
-const TaskCard = ({ task }) => {
+import "./Styles/TaskCard.css";
+
+const TaskCard = ({ task, onTaskUpdated, onTaskDeleted }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const cardStyle = {
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-    padding: "10px",
-    marginBottom: "10px",
-    backgroundColor: "#f9f9f9",
-    cursor: "pointer",
-  };
-
-  const titleStyle = {
-    fontSize: "1.5rem",
-    fontWeight: "bold",
-    margin: "0",
-    cursor: "pointer", // Add cursor style to indicate clickability
-  };
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -30,10 +16,17 @@ const TaskCard = ({ task }) => {
 
   return (
     <div>
-      <div style={cardStyle} onClick={openPopup}>
-        <h3 style={titleStyle}>{task.title}</h3>
+      <div className="card" onClick={openPopup}>
+        <h3 className="title">{task.title}</h3>
       </div>
-      {isPopupOpen && <TaskDetailsPopup task={task} onClose={closePopup} />}
+      {isPopupOpen && (
+        <TaskDetailsPopup
+          task={task}
+          onClose={closePopup}
+          onTaskUpdated={onTaskUpdated}
+          onTaskDeleted={onTaskDeleted}
+        />
+      )}
     </div>
   );
 };
