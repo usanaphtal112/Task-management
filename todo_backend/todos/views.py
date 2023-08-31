@@ -4,26 +4,40 @@ from django.shortcuts import render
 from rest_framework import generics
 from .models import Task, Category
 from .serializers import TaskSerializer, CategorySerializer
-from .permissions import IsAuthorOrReadOnly
+from drf_spectacular.utils import extend_schema
 
 
+@extend_schema(
+    description="Task Stage Board implementations",
+    tags=["Tasks Stage"],
+)
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
+@extend_schema(
+    description="Task Stage Board implementations",
+    tags=["Tasks Stage"],
+)
 class CategoryRetrieveUpdateDelentView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
+@extend_schema(
+    description="Task Board implementations",
+    tags=["Tasks"],
+)
 class TaskListCreateView(generics.ListCreateAPIView):
-    # permission_classes = (IsAuthorOrReadOnly,)
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
 
+@extend_schema(
+    description="Task Board implementations",
+    tags=["Tasks"],
+)
 class TaskRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-    # permission_classes = (IsAuthorOrReadOnly,)
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
