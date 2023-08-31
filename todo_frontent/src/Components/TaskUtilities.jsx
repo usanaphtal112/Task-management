@@ -6,7 +6,7 @@ export const fetchTaskboardStages = async (setStages) => {
   try {
     const response = await axios.get(`${API_BASE_URL}taskboard_stage/`);
     setStages(response.data);
-    console.log(response);
+    // console.log(response);
   } catch (error) {
     console.error("Error fetching taskboard stages:", error);
   }
@@ -53,7 +53,7 @@ export const fetchTasks = async (setTasks) => {
   try {
     const response = await axios.get(`${API_BASE_URL}tasks/`);
     setTasks(response.data);
-    console.log(response);
+    // console.log(response);
   } catch (error) {
     console.error("Error fetching tasks:", error);
   }

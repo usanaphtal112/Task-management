@@ -58,10 +58,12 @@ const TaskBoard = () => {
     );
   };
 
-  const handleTaskDeleted = (deletedTask) => {
-    setTasks((prevTasks) =>
-      prevTasks.filter((task) => task.id !== deletedTask.id)
-    );
+  const handleTaskDeleted = async () => {
+    try {
+      await fetchTasks(setTasks);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
   };
 
   return (
@@ -98,8 +100,8 @@ const TaskBoard = () => {
                           >
                             <TaskCard
                               task={task}
-                              onTaskUpdated={handleTaskUpdated} // Pass onTaskUpdated function
-                              onTaskDeleted={handleTaskDeleted} // Pass onTaskDeleted function
+                              onTaskUpdated={handleTaskUpdated}
+                              onTaskDeleted={handleTaskDeleted}
                             />
                           </div>
                         )}

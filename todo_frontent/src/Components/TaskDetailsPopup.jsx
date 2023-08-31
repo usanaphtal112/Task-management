@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { updateTask, deleteTask } from "./TaskUtilities";
 import "./Styles/TaskDetailsPopup.css";
 
-const TaskDetailsPopup = ({ task, onClose, onTaskUpdated }) => {
+const TaskDetailsPopup = ({ task, onClose, onTaskUpdated, onTaskDeleted }) => {
   const [editedTask, setEditedTask] = useState(task);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -28,7 +28,7 @@ const TaskDetailsPopup = ({ task, onClose, onTaskUpdated }) => {
       try {
         await deleteTask(task.id);
         onClose();
-        onTaskDeleted(task);
+        onTaskDeleted();
       } catch (error) {
         console.error("Error deleting task:", error);
       }
