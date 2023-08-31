@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8000/api/v1/";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const fetchTaskboardStages = async (setStages) => {
   try {
@@ -9,6 +9,18 @@ export const fetchTaskboardStages = async (setStages) => {
     // console.log(response);
   } catch (error) {
     console.error("Error fetching taskboard stages:", error);
+  }
+};
+
+export const createTaskboardStage = async (stageName) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}taskboard_stage/`, {
+      name: stageName,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating taskboard stage:", error);
+    throw error;
   }
 };
 

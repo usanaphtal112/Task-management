@@ -26,16 +26,6 @@ const TaskCard = ({ task, onTaskUpdated, onTaskDeleted }) => {
           onTaskUpdated={onTaskUpdated}
           onTaskDeleted={onTaskDeleted}
         />
-
-        // <TaskDetailsPopup
-        //   task={task}
-        //   onClose={closePopup}
-        //   onTaskUpdated={onTaskUpdated}
-        //   onTaskDeleted={(deletedTask) => {
-        //     onTaskDeleted(deletedTask);
-        //     closePopup();
-        //   }}
-        // />
       )}
     </div>
   );

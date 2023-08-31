@@ -6,6 +6,9 @@ import {
   fetchTasks,
   updateTaskOnDrop,
   fetchTaskboardStages,
+  deleteTaskboardStage,
+  updateTaskboardStage,
+  createTaskboardStage,
 } from "./TaskUtilities";
 import "./Styles/TaskBoard.css";
 
@@ -14,6 +17,9 @@ const TaskBoard = () => {
   const [taskStages, setTaskStages] = useState([]);
   const [showAddTaskPopup, setShowAddTaskPopup] = useState(false);
   const [selectedStage, setSelectedStage] = useState(null);
+  const [showAddStageModal, setShowAddStageModal] = useState(false);
+  const [selectedStageId, setSelectedStageId] = useState(null);
+  const [newStageName, setNewStageName] = useState("");
 
   useEffect(() => {
     fetchTasks(setTasks);
@@ -48,7 +54,6 @@ const TaskBoard = () => {
   };
 
   const handleTaskAdded = (newTask) => {
-    // setTasks([...tasks, newTask]);
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
@@ -66,10 +71,67 @@ const TaskBoard = () => {
     }
   };
 
+  const handleStageOptionsClick = (stageId) => {
+    if (selectedStageId === stageId) {
+      setSelectedStageId(null);
+    } else {
+      setSelectedStageId(stageId);
+    }
+  };
+
+  const handleEditStage = async (stageId) => {
+    try {
+      const newName = prompt("Enter new stage name:");
+      if (newName) {
+        const updatedStage = await updateTaskboardStage(stageId, {
+          name: newName,
+        });
+        setTaskStages((prevStages) =>
+          prevStages.map((stage) =>
+            stage.id === updatedStage.id ? updatedStage : stage
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error updating stage:", error);
+    }
+  };
+
+  const handleDeleteStage = async (stageId) => {
+    try {
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this stage?"
+      );
+      if (confirmDelete) {
+        await deleteTaskboardStage(stageId);
+        setTaskStages((prevStages) =>
+          prevStages.filter((stage) => stage.id !== stageId)
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting stage:", error);
+    }
+  };
+
+  const handleAddStage = async () => {
+    try {
+      if (newStageName.trim() === "") {
+        alert("Please enter a valid stage name.");
+        return;
+      }
+
+      const newStage = await createTaskboardStage(newStageName);
+
+      setTaskStages((prevStages) => [...prevStages, newStage]);
+      setNewStageName("");
+      setShowAddStageModal(false);
+    } catch (error) {
+      console.error("Error adding new stage:", error);
+    }
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="task-board">
-        {/* <h2>Task Management Projects</h2> */}
         <div className="status-row">
           {taskStages.map((stage) => (
             <Droppable
@@ -83,7 +145,29 @@ const TaskBoard = () => {
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
-                  <h2>{stage.name}</h2>
+                  <div className="stage-header">
+                    <h2>{stage.name}</h2>
+                    <div className="stage-options">
+                      <div
+                        className="ellipsis"
+                        onClick={() => handleStageOptionsClick(stage.id)}
+                      >
+                        ...
+                      </div>
+
+                      {selectedStageId === stage.id && (
+                        <div className="dropdown-menu">
+                          <button onClick={() => handleEditStage(stage.id)}>
+                            Edit
+                          </button>
+                          <button onClick={() => handleDeleteStage(stage.id)}>
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   {tasks
                     .filter((task) => task.category === stage.id)
                     .map((task, index) => (
@@ -115,18 +199,41 @@ const TaskBoard = () => {
               )}
             </Droppable>
           ))}
+          <div className="add-stage-button-container">
+            <button
+              className="add-stage-button"
+              onClick={() => setShowAddStageModal(true)}
+            >
+              Add New Stage
+            </button>
+          </div>
         </div>
         {showAddTaskPopup && (
           <AddTaskPopup
-            stage={selectedStage} // Pass the selected stage here
+            stage={selectedStage}
             onClose={() => {
-              setSelectedStage(null); // Reset selected stage
+              setSelectedStage(null);
               setShowAddTaskPopup(false);
             }}
             onTaskAdded={handleTaskAdded}
           />
         )}
       </div>
+      {showAddStageModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Add New Stage</h2>
+            <input
+              type="text"
+              placeholder="Stage Name"
+              value={newStageName}
+              onChange={(e) => setNewStageName(e.target.value)}
+            />
+            <button onClick={handleAddStage}>Add Stage</button>
+            <button onClick={() => setShowAddStageModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
     </DragDropContext>
   );
 };

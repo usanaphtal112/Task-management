@@ -9,6 +9,7 @@
 
 
 #Frontend
+/todo_frontent/.env
 # Logs
 /todo_frontent/logs
 /todo_frontent/*.log

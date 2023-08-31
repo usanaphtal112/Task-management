@@ -45,6 +45,42 @@
   button:hover {
     background-color: #00273b;
   }
+
+
+  /* New stage */
+
+  .stage-options {
+    position: relative;
+  }
+  
+  .ellipsis {
+    cursor: pointer;
+    font-size: 24px;
+    margin-left: 8px;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: rgb(23, 1, 1);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    z-index: 10;
+  }
+  
+  .dropdown-menu button {
+    display: block;
+    width: 100%;
+    padding: 4px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  
+  /* New stage */
   
   @media (max-width: 600px) {
     .status-column {

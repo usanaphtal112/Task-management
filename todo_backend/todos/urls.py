@@ -19,7 +19,7 @@ urlpatterns = [
         name="task-stage-list-create",
     ),
     path(
-        "taskboard_stage/<int:pk>",
+        "taskboard_stage/<int:pk>/",
         CategoryRetrieveUpdateDelentView.as_view(),
         name="task-stage-retrieve-update-delete",
     ),
