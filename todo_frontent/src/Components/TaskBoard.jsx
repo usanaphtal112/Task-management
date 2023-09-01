@@ -89,7 +89,6 @@ const TaskBoard = () => {
   };
 
   const handleEditStage = (stageId) => {
-    setDropdownOpen(true);
     setEditingStageId(stageId);
   };
 
@@ -107,7 +106,6 @@ const TaskBoard = () => {
       console.error("Error updating stage:", error);
     } finally {
       setEditingStageId(null);
-      setDropdownOpen(false); // Close the dropdown menu
     }
   };
 
@@ -129,23 +127,6 @@ const TaskBoard = () => {
       setDropdownOpen(false); // Close the dropdown menu
     }
   };
-
-  // const handleAddStage = async () => {
-  //   try {
-  //     if (newStageName.trim() === "") {
-  //       alert("Please enter a valid stage name.");
-  //       return;
-  //     }
-
-  //     const newStage = await createTaskboardStage(newStageName);
-
-  //     setTaskStages((prevStages) => [...prevStages, newStage]);
-  //     setNewStageName("");
-  //     setShowAddStageModal(false);
-  //   } catch (error) {
-  //     console.error("Error adding new stage:", error);
-  //   }
-  // };
 
   const handleAddStage = async () => {
     try {
@@ -254,7 +235,6 @@ const TaskBoard = () => {
             <button
               className="add-stage-button"
               onClick={() => setShowAddStageDialog(true)} // Open the dialog
-              // onClick={() => setShowAddStageModal(true)}
             >
               Add New Stage
             </button>
@@ -271,21 +251,6 @@ const TaskBoard = () => {
           />
         )}
       </div>
-      {/* {showAddStageModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Add New Stage</h2>
-            <input
-              type="text"
-              placeholder="Stage Name"
-              value={newStageName}
-              onChange={(e) => setNewStageName(e.target.value)}
-            />
-            <button onClick={handleAddStage}>Add Stage</button>
-            <button onClick={() => setShowAddStageModal(false)}>Cancel</button>
-          </div>
-        </div>
-      )} */}
 
       {showAddStageModal && (
         <div className="modal">
