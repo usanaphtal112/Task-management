@@ -79,8 +79,53 @@
     background-color: transparent;
     cursor: pointer;
   }
-  
-  /* New stage */
+
+
+  /* Add New Stage Dialog Styles */
+.add-stage-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  z-index: 1000;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  width: 400px; /* Adjust the width as needed */
+}
+
+.add-stage-dialog h2 {
+  margin-top: 0;
+}
+
+.add-stage-dialog input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.add-stage-dialog button {
+  background-color: #014d3a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.add-stage-dialog button:last-child {
+  margin-right: 0;
+  background-color: #ccc;
+}
+
+.add-stage-dialog button:hover {
+  background-color: #012126;
+}
+
   
   @media (max-width: 600px) {
     .status-column {

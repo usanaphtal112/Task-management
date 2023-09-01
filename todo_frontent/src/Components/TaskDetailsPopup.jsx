@@ -23,20 +23,6 @@ const TaskDetailsPopup = ({ task, onClose, onTaskUpdated, onTaskDeleted }) => {
     }
   };
 
-  // const handleDelete = async () => {
-  //   const shouldDelete = window.confirm(
-  //     "Are you sure you want to delete this task?"
-  //   );
-  //   if (shouldDelete) {
-  //     try {
-  //       await deleteTask(task.id);
-  //       onClose();
-  //       onTaskDeleted();
-  //     } catch (error) {
-  //       console.error("Error deleting task:", error);
-  //     }
-  //   }
-  // };
   const handleDelete = () => {
     setDialogOpen(true);
   };

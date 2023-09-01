@@ -12,6 +12,7 @@ import {
   createTaskboardStage,
 } from "./TaskUtilities";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
+import FormDialogBox from "./FormDialogBox";
 import "./Styles/TaskBoard.css";
 
 const TaskBoard = () => {
@@ -22,6 +23,9 @@ const TaskBoard = () => {
   const [showAddStageModal, setShowAddStageModal] = useState(false);
   const [selectedStageId, setSelectedStageId] = useState(null);
   const [newStageName, setNewStageName] = useState("");
+
+  const [editingStageId, setEditingStageId] = useState(null);
+  const [showAddStageDialog, setShowAddStageDialog] = useState(false);
 
   const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [selectedStageToDelete, setSelectedStageToDelete] = useState(null);
@@ -84,39 +88,28 @@ const TaskBoard = () => {
     }
   };
 
-  const handleEditStage = async (stageId) => {
-    try {
-      const newName = prompt("Enter new stage name:");
-      if (newName) {
-        const updatedStage = await updateTaskboardStage(stageId, {
-          name: newName,
-        });
-        setTaskStages((prevStages) =>
-          prevStages.map((stage) =>
-            stage.id === updatedStage.id ? updatedStage : stage
-          )
-        );
-      }
-    } catch (error) {
-      console.error("Error updating stage:", error);
-    }
+  const handleEditStage = (stageId) => {
+    setDropdownOpen(true);
+    setEditingStageId(stageId);
   };
 
-  // const handleDeleteStage = async (stageId) => {
-  //   try {
-  //     const confirmDelete = window.confirm(
-  //       "Are you sure you want to delete this stage?"
-  //     );
-  //     if (confirmDelete) {
-  //       await deleteTaskboardStage(stageId);
-  //       setTaskStages((prevStages) =>
-  //         prevStages.filter((stage) => stage.id !== stageId)
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting stage:", error);
-  //   }
-  // };
+  const handleEditStageConfirmed = async (newName) => {
+    try {
+      const updatedStage = await updateTaskboardStage(editingStageId, {
+        name: newName,
+      });
+      setTaskStages((prevStages) =>
+        prevStages.map((stage) =>
+          stage.id === updatedStage.id ? updatedStage : stage
+        )
+      );
+    } catch (error) {
+      console.error("Error updating stage:", error);
+    } finally {
+      setEditingStageId(null);
+      setDropdownOpen(false); // Close the dropdown menu
+    }
+  };
 
   const handleDeleteStage = (stageId) => {
     setSelectedStageToDelete(stageId);
@@ -133,8 +126,26 @@ const TaskBoard = () => {
     } finally {
       // Close the delete confirmation dialog
       setDeleteConfirmationOpen(false);
+      setDropdownOpen(false); // Close the dropdown menu
     }
   };
+
+  // const handleAddStage = async () => {
+  //   try {
+  //     if (newStageName.trim() === "") {
+  //       alert("Please enter a valid stage name.");
+  //       return;
+  //     }
+
+  //     const newStage = await createTaskboardStage(newStageName);
+
+  //     setTaskStages((prevStages) => [...prevStages, newStage]);
+  //     setNewStageName("");
+  //     setShowAddStageModal(false);
+  //   } catch (error) {
+  //     console.error("Error adding new stage:", error);
+  //   }
+  // };
 
   const handleAddStage = async () => {
     try {
@@ -147,7 +158,7 @@ const TaskBoard = () => {
 
       setTaskStages((prevStages) => [...prevStages, newStage]);
       setNewStageName("");
-      setShowAddStageModal(false);
+      setShowAddStageDialog(false);
     } catch (error) {
       console.error("Error adding new stage:", error);
     }
@@ -175,9 +186,8 @@ const TaskBoard = () => {
                         className="ellipsis"
                         onClick={() => handleStageOptionsClick(stage.id)}
                       >
-                        ...
+                        &gt;&gt;&gt;
                       </div>
-
                       {selectedStageId === stage.id && (
                         <div className="dropdown-menu">
                           <button onClick={() => handleEditStage(stage.id)}>
@@ -187,6 +197,19 @@ const TaskBoard = () => {
                             Delete
                           </button>
                         </div>
+                      )}
+                      {/* Edit Stage Dialog */}
+                      {editingStageId && (
+                        <FormDialogBox
+                          open={Boolean(editingStageId)}
+                          onClose={() => setEditingStageId(null)}
+                          onConfirm={handleEditStageConfirmed}
+                          initialValue={
+                            taskStages.find(
+                              (stage) => stage.id === editingStageId
+                            )?.name
+                          }
+                        />
                       )}
                       <DeleteConfirmationDialog
                         open={isDeleteConfirmationOpen}
@@ -230,7 +253,8 @@ const TaskBoard = () => {
           <div className="add-stage-button-container">
             <button
               className="add-stage-button"
-              onClick={() => setShowAddStageModal(true)}
+              onClick={() => setShowAddStageDialog(true)} // Open the dialog
+              // onClick={() => setShowAddStageModal(true)}
             >
               Add New Stage
             </button>
@@ -247,6 +271,22 @@ const TaskBoard = () => {
           />
         )}
       </div>
+      {/* {showAddStageModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Add New Stage</h2>
+            <input
+              type="text"
+              placeholder="Stage Name"
+              value={newStageName}
+              onChange={(e) => setNewStageName(e.target.value)}
+            />
+            <button onClick={handleAddStage}>Add Stage</button>
+            <button onClick={() => setShowAddStageModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )} */}
+
       {showAddStageModal && (
         <div className="modal">
           <div className="modal-content">
@@ -259,6 +299,23 @@ const TaskBoard = () => {
             />
             <button onClick={handleAddStage}>Add Stage</button>
             <button onClick={() => setShowAddStageModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {/* Add New Stage dialog */}
+      {showAddStageDialog && (
+        <div className="add-stage-dialog">
+          <div className="modal-content">
+            <h2>Add New Stage</h2>
+            <input
+              type="text"
+              placeholder="Stage Name"
+              value={newStageName}
+              onChange={(e) => setNewStageName(e.target.value)}
+            />
+            <button onClick={handleAddStage}>Add Stage</button>
+            <button onClick={() => setShowAddStageDialog(false)}>Cancel</button>
           </div>
         </div>
       )}
