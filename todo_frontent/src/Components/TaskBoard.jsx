@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
 import TaskCard from "./TaskCard";
 import AddTaskPopup from "./AddTaskPopup";
 import {
@@ -10,6 +11,7 @@ import {
   updateTaskboardStage,
   createTaskboardStage,
 } from "./TaskUtilities";
+import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 import "./Styles/TaskBoard.css";
 
 const TaskBoard = () => {
@@ -20,6 +22,9 @@ const TaskBoard = () => {
   const [showAddStageModal, setShowAddStageModal] = useState(false);
   const [selectedStageId, setSelectedStageId] = useState(null);
   const [newStageName, setNewStageName] = useState("");
+
+  const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [selectedStageToDelete, setSelectedStageToDelete] = useState(null);
 
   useEffect(() => {
     fetchTasks(setTasks);
@@ -97,19 +102,37 @@ const TaskBoard = () => {
     }
   };
 
-  const handleDeleteStage = async (stageId) => {
+  // const handleDeleteStage = async (stageId) => {
+  //   try {
+  //     const confirmDelete = window.confirm(
+  //       "Are you sure you want to delete this stage?"
+  //     );
+  //     if (confirmDelete) {
+  //       await deleteTaskboardStage(stageId);
+  //       setTaskStages((prevStages) =>
+  //         prevStages.filter((stage) => stage.id !== stageId)
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting stage:", error);
+  //   }
+  // };
+
+  const handleDeleteStage = (stageId) => {
+    setSelectedStageToDelete(stageId);
+    setDeleteConfirmationOpen(true);
+  };
+  const handleDeleteStageConfirmed = async () => {
     try {
-      const confirmDelete = window.confirm(
-        "Are you sure you want to delete this stage?"
+      await deleteTaskboardStage(selectedStageToDelete);
+      setTaskStages((prevStages) =>
+        prevStages.filter((stage) => stage.id !== selectedStageToDelete)
       );
-      if (confirmDelete) {
-        await deleteTaskboardStage(stageId);
-        setTaskStages((prevStages) =>
-          prevStages.filter((stage) => stage.id !== stageId)
-        );
-      }
     } catch (error) {
       console.error("Error deleting stage:", error);
+    } finally {
+      // Close the delete confirmation dialog
+      setDeleteConfirmationOpen(false);
     }
   };
 
@@ -165,6 +188,11 @@ const TaskBoard = () => {
                           </button>
                         </div>
                       )}
+                      <DeleteConfirmationDialog
+                        open={isDeleteConfirmationOpen}
+                        onClose={() => setDeleteConfirmationOpen(false)}
+                        onConfirm={handleDeleteStageConfirmed}
+                      />
                     </div>
                   </div>
 

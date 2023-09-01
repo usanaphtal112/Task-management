@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { updateTask, deleteTask } from "./TaskUtilities";
+import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 import "./Styles/TaskDetailsPopup.css";
 
 const TaskDetailsPopup = ({ task, onClose, onTaskUpdated, onTaskDeleted }) => {
   const [editedTask, setEditedTask] = useState(task);
   const [isEditing, setIsEditing] = useState(false);
+
+  const [isDialogOpen, setDialogOpen] = useState(false);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -20,21 +23,33 @@ const TaskDetailsPopup = ({ task, onClose, onTaskUpdated, onTaskDeleted }) => {
     }
   };
 
-  const handleDelete = async () => {
-    const shouldDelete = window.confirm(
-      "Are you sure you want to delete this task?"
-    );
-    if (shouldDelete) {
-      try {
-        await deleteTask(task.id);
-        onClose();
-        onTaskDeleted();
-      } catch (error) {
-        console.error("Error deleting task:", error);
-      }
-    }
+  // const handleDelete = async () => {
+  //   const shouldDelete = window.confirm(
+  //     "Are you sure you want to delete this task?"
+  //   );
+  //   if (shouldDelete) {
+  //     try {
+  //       await deleteTask(task.id);
+  //       onClose();
+  //       onTaskDeleted();
+  //     } catch (error) {
+  //       console.error("Error deleting task:", error);
+  //     }
+  //   }
+  // };
+  const handleDelete = () => {
+    setDialogOpen(true);
   };
 
+  const handleDeleteConfirmed = async () => {
+    try {
+      await deleteTask(task.id);
+      onTaskDeleted();
+      onClose();
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
   const handleCancel = () => {
     setEditedTask(task);
     setIsEditing(false);
@@ -69,6 +84,11 @@ const TaskDetailsPopup = ({ task, onClose, onTaskUpdated, onTaskDeleted }) => {
           <button onClick={onClose}>Close</button>
         </>
       )}
+      <DeleteConfirmationDialog
+        open={isDialogOpen}
+        onClose={() => setDialogOpen(false)}
+        onConfirm={handleDeleteConfirmed}
+      />
     </div>
   );
 };
