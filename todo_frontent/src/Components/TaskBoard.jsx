@@ -144,100 +144,110 @@ const TaskBoard = () => {
       console.error("Error adding new stage:", error);
     }
   };
+
+  // Calculate the number of task boards
+  const numTaskBoards = taskStages.length;
+
+  useEffect(() => {
+    // Conditionally add a class to the container if there are more than four boards
+    const taskRowContainer = document.querySelector(".status-row-container");
+    if (taskRowContainer) {
+      if (numTaskBoards > 4) {
+        taskRowContainer.classList.add("scrollable");
+      } else {
+        taskRowContainer.classList.remove("scrollable");
+      }
+    }
+  }, [numTaskBoards]);
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="task-board">
-        <div className="status-row">
-          {taskStages.map((stage) => (
-            <Droppable
-              key={stage.id}
-              droppableId={stage.id.toString()}
-              direction="vertical"
-            >
-              {(provided) => (
-                <div
-                  className="status-column"
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  <div className="stage-header">
-                    <h2>{stage.name}</h2>
-                    <div className="stage-options">
-                      <div
-                        className="ellipsis"
-                        onClick={() => handleStageOptionsClick(stage.id)}
-                      >
-                        &gt;&gt;&gt;
-                      </div>
-                      {selectedStageId === stage.id && (
-                        <div className="dropdown-menu">
-                          <button onClick={() => handleEditStage(stage.id)}>
-                            Edit
-                          </button>
-                          <button onClick={() => handleDeleteStage(stage.id)}>
-                            Delete
-                          </button>
+        {/* Add the .status-row-container here */}
+        <div className="status-row-container">
+          <div className="status-row">
+            {taskStages.map((stage) => (
+              <Droppable
+                key={stage.id}
+                droppableId={stage.id.toString()}
+                direction="vertical"
+              >
+                {(provided) => (
+                  <div
+                    className="status-column"
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    <div className="stage-header">
+                      <h2>{stage.name}</h2>
+                      <div className="stage-options">
+                        <div
+                          className="ellipsis"
+                          onClick={() => handleStageOptionsClick(stage.id)}
+                        >
+                          &gt;&gt;&gt;
                         </div>
-                      )}
-                      {/* Edit Stage Dialog */}
-                      {editingStageId && (
-                        <FormDialogBox
-                          open={Boolean(editingStageId)}
-                          onClose={() => setEditingStageId(null)}
-                          onConfirm={handleEditStageConfirmed}
-                          initialValue={
-                            taskStages.find(
-                              (stage) => stage.id === editingStageId
-                            )?.name
-                          }
-                        />
-                      )}
-                      <DeleteConfirmationDialog
-                        open={isDeleteConfirmationOpen}
-                        onClose={() => setDeleteConfirmationOpen(false)}
-                        onConfirm={handleDeleteStageConfirmed}
-                      />
-                    </div>
-                  </div>
-
-                  {tasks
-                    .filter((task) => task.category === stage.id)
-                    .map((task, index) => (
-                      <Draggable
-                        key={task.id.toString()}
-                        draggableId={task.id.toString()}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <TaskCard
-                              task={task}
-                              onTaskUpdated={handleTaskUpdated}
-                              onTaskDeleted={handleTaskDeleted}
-                            />
+                        {selectedStageId === stage.id && (
+                          <div className="dropdown-menu">
+                            <button onClick={() => handleEditStage(stage.id)}>
+                              Edit
+                            </button>
+                            <button onClick={() => handleDeleteStage(stage.id)}>
+                              Delete
+                            </button>
                           </div>
                         )}
-                      </Draggable>
-                    ))}
-                  {provided.placeholder}
-                  <button onClick={() => handleAddTask(stage)}>
-                    Add New Task
-                  </button>
-                </div>
-              )}
-            </Droppable>
-          ))}
-          <div className="add-stage-button-container">
-            <button
-              className="add-stage-button"
-              onClick={() => setShowAddStageDialog(true)} // Open the dialog
-            >
-              Add New Stage
-            </button>
+                        {/* Edit Stage Dialog */}
+                        {editingStageId && (
+                          <FormDialogBox
+                            open={Boolean(editingStageId)}
+                            onClose={() => setEditingStageId(null)}
+                            onConfirm={handleEditStageConfirmed}
+                            initialValue={
+                              taskStages.find(
+                                (stage) => stage.id === editingStageId
+                              )?.name
+                            }
+                          />
+                        )}
+                        <DeleteConfirmationDialog
+                          open={isDeleteConfirmationOpen}
+                          onClose={() => setDeleteConfirmationOpen(false)}
+                          onConfirm={handleDeleteStageConfirmed}
+                        />
+                      </div>
+                    </div>
+
+                    {tasks
+                      .filter((task) => task.category === stage.id)
+                      .map((task, index) => (
+                        <Draggable
+                          key={task.id.toString()}
+                          draggableId={task.id.toString()}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <TaskCard
+                                task={task}
+                                onTaskUpdated={handleTaskUpdated}
+                                onTaskDeleted={handleTaskDeleted}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                    {provided.placeholder}
+                    <button onClick={() => handleAddTask(stage)}>
+                      Add New Task
+                    </button>
+                  </div>
+                )}
+              </Droppable>
+            ))}
           </div>
         </div>
         {showAddTaskPopup && (
@@ -284,6 +294,15 @@ const TaskBoard = () => {
           </div>
         </div>
       )}
+
+      <div className="add-stage-button-container">
+        <button
+          className="add-stage-button"
+          onClick={() => setShowAddStageDialog(true)}
+        >
+          Add New Stage
+        </button>
+      </div>
     </DragDropContext>
   );
 };

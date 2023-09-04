@@ -49,15 +49,19 @@ const TaskDetailsPopup = ({ task, onClose, onTaskUpdated, onTaskDeleted }) => {
     <div className="popup">
       {isEditing ? (
         <>
-          <input
-            type="text"
-            value={editedTask.title}
-            onChange={(e) => handleChange("title", e.target.value)}
-          />
-          <textarea
-            value={editedTask.description}
-            onChange={(e) => handleChange("description", e.target.value)}
-          />
+          <div className="edit-input">
+            <input
+              type="text"
+              value={editedTask.title}
+              onChange={(e) => handleChange("title", e.target.value)}
+            />
+          </div>
+          <div className="edit-input">
+            <textarea
+              value={editedTask.description}
+              onChange={(e) => handleChange("description", e.target.value)}
+            />
+          </div>
           <button onClick={handleSave}>Save</button>
           <button onClick={handleCancel}>Cancel</button>
         </>
