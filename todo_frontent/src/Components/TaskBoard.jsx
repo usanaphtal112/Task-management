@@ -122,9 +122,8 @@ const TaskBoard = () => {
     } catch (error) {
       console.error("Error deleting stage:", error);
     } finally {
-      // Close the delete confirmation dialog
       setDeleteConfirmationOpen(false);
-      setDropdownOpen(false); // Close the dropdown menu
+      setDropdownOpen(false);
     }
   };
 
@@ -145,11 +144,9 @@ const TaskBoard = () => {
     }
   };
 
-  // Calculate the number of task boards
   const numTaskBoards = taskStages.length;
 
   useEffect(() => {
-    // Conditionally add a class to the container if there are more than four boards
     const taskRowContainer = document.querySelector(".status-row-container");
     if (taskRowContainer) {
       if (numTaskBoards > 4) {
@@ -162,7 +159,6 @@ const TaskBoard = () => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="task-board">
-        {/* Add the .status-row-container here */}
         <div className="status-row-container">
           <div className="status-row">
             {taskStages.map((stage) => (

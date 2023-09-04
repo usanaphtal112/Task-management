@@ -76,6 +76,11 @@
     resize: vertical;
     font-family: inherit;
   }
+
+  .description {
+    max-height: 100px;
+    overflow-y: auto;
+  }
   
 
   @media (max-width: 480px) {

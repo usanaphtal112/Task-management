@@ -1,5 +1,3 @@
-// AddTaskPopup.jsx
-
 import React, { useState } from "react";
 import { addTask } from "./TaskUtilities";
 import "./Styles/AddTaskPopup.css";

@@ -45,6 +45,11 @@ const TaskDetailsPopup = ({ task, onClose, onTaskUpdated, onTaskDeleted }) => {
     setEditedTask((prevTask) => ({ ...prevTask, [field]: value }));
   };
 
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString(); // Adjust options as needed
+  };
+
   return (
     <div className="popup">
       {isEditing ? (
@@ -68,7 +73,14 @@ const TaskDetailsPopup = ({ task, onClose, onTaskUpdated, onTaskDeleted }) => {
       ) : (
         <>
           <h2>{task.title}</h2>
-          <p>{task.description}</p>
+          <div>
+            <p>Description:</p>
+            <p className="description">{task.description}</p>
+          </div>
+          <div>
+            <p>Created At: {formatTimestamp(task.created_at)}</p>
+            <p>Updated At: {formatTimestamp(task.updated_at)}</p>
+          </div>
           <button onClick={handleEdit}>Edit</button>
           <button onClick={handleDelete}>Delete</button>
           <button onClick={onClose}>Close</button>
